@@ -1,5 +1,11 @@
 # Changelog
 
+## [Unreleased]
+
+### Changed
+- Updated ffmpeg-next dependency to use latest git version for FFmpeg 7.x compatibility
+- Fixed compilation issues related to FFmpeg API changes
+
 ## [0.1.0] - 2024-03-24
 
 ### Added

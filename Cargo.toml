@@ -6,5 +6,5 @@ edition = "2021"
 [dependencies]
 ratatui = "0.24.0"  # TUI framework
 crossterm = "0.27.0"  # Terminal manipulation
-ffmpeg-next = "6.1.0"  # FFmpeg bindings for Rust
+ffmpeg-next = { git = "https://github.com/zmwangx/rust-ffmpeg", branch = "master" }  # FFmpeg bindings for Rust
 anyhow = "1.0.75"  # Error handling
