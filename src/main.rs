@@ -6,7 +6,7 @@ use crossterm::{
 };
 use ratatui::{
     prelude::*,
-    widgets::{Block, Borders, Paragraph},
+    widgets::{Block, Borders, Paragraph, ScrollbarState},
 };
 use std::{io, process::Command, time::Duration, io::{BufRead, BufReader}, sync::mpsc};
 use std::thread;
@@ -19,6 +19,8 @@ struct App {
     current_focus: Focus,
     message: String,
     is_processing: bool,
+    scroll_state: ScrollbarState,
+    scroll_offset: usize,
 }
 
 #[derive(PartialEq)]
@@ -33,12 +35,14 @@ impl App {
     fn new() -> App {
         App {
             input_file: String::new(),
-            start_time: String::new(),
+            start_time: String::from("00:00:00"),
             end_time: String::new(),
             output_file: String::new(),
             current_focus: Focus::InputFile,
             message: String::from("Enter input file path"),
             is_processing: false,
+            scroll_state: ScrollbarState::default(),
+            scroll_offset: 0,
         }
     }
 
@@ -151,6 +155,8 @@ impl App {
             while let Ok(line) = rx.try_recv() {
                 self.message.push_str(&line);
                 self.message.push('\n');
+                // Auto-scroll to bottom when new content is added
+                self.scroll_offset = self.message.lines().count().saturating_sub(1);
             }
             thread::sleep(Duration::from_millis(50));
         }
@@ -159,6 +165,8 @@ impl App {
         while let Ok(line) = rx.try_recv() {
             self.message.push_str(&line);
             self.message.push('\n');
+            // Auto-scroll to bottom when new content is added
+            self.scroll_offset = self.message.lines().count().saturating_sub(1);
         }
 
         let status = child.wait().context("Failed to wait for ffmpeg")?;
@@ -214,7 +222,7 @@ fn run_app<B: Backend>(terminal: &mut Terminal<B>, app: &mut App) -> io::Result<
 
         if event::poll(timeout)? {
             if let Event::Key(key) = event::read()? {
-                if key.code == KeyCode::Char('q') && !app.is_processing {
+                if key.code == KeyCode::Char('q') && key.modifiers == event::KeyModifiers::CONTROL && !app.is_processing {
                     return Ok(());
                 }
                 app.process_input(key.code);
@@ -294,10 +302,23 @@ fn ui(f: &mut Frame, app: &App) {
     let message_block = Block::default()
         .title("FFmpeg Output")
         .borders(Borders::ALL);
-    f.render_widget(
-        Paragraph::new(app.message.as_str())
-            .block(message_block)
-            .wrap(ratatui::widgets::Wrap { trim: true }),
-        chunks[4],
+
+    let mut scroll_state = app.scroll_state.clone();
+    let paragraph = Paragraph::new(app.message.as_str())
+        .block(message_block)
+        .wrap(ratatui::widgets::Wrap { trim: true })
+        .scroll((app.scroll_offset as u16, 0));
+
+    f.render_widget(paragraph, chunks[4]);
+
+    let scrollbar = ratatui::widgets::Scrollbar::default()
+        .orientation(ratatui::widgets::ScrollbarOrientation::VerticalRight)
+        .begin_symbol(Some("↑"))
+        .end_symbol(Some("↓"));
+
+    f.render_stateful_widget(
+        scrollbar,
+        chunks[4].inner(&Margin { vertical: 1, horizontal: 0 }),
+        &mut scroll_state,
     );
 }

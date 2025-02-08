@@ -1,62 +1,62 @@
 # vclip
 
-A terminal-based video clip extraction tool written in Rust. This application provides a simple TUI (Terminal User Interface) for extracting clips from video files using FFmpeg.
+A terminal-based video clip extraction tool using FFmpeg.
 
 ## Features
 
-- Interactive terminal user interface
-- Easy time-based video clip extraction
-- Real-time progress feedback
-- Copy stream (fast extraction without re-encoding)
-- Simple keyboard navigation
+- Interactive TUI (Terminal User Interface)
+- Real-time FFmpeg output display with auto-scrolling
+- Simple input fields for:
+  - Input video file path
+  - Start time (HH:MM:SS)
+  - End time (HH:MM:SS)
+  - Output file path
 
-## Prerequisites
+## Controls
 
-Before building and running vclip, you need to install some system dependencies. See [DEPENDENCIES.md](DEPENDENCIES.md) for detailed installation instructions.
+- `Tab`: Cycle through input fields
+- `Enter`: Start processing when all fields are filled
+- `Backspace`: Delete characters in input fields
+- `Ctrl+Q`: Quit application
+
+## Requirements
+
+- FFmpeg must be installed on your system
+- Rust 1.70 or higher
 
 ## Installation
 
-1. Clone the repository:
+```bash
+cargo install vclip
+```
+
+## Building from source
+
 ```bash
 git clone https://github.com/yourusername/vclip.git
 cd vclip
-```
-
-2. Build the project:
-```bash
 cargo build --release
 ```
 
-The compiled binary will be available at `target/release/vclip`
+The binary will be available at `target/release/vclip`
 
 ## Usage
 
-1. Run the application:
+1. Launch the application:
 ```bash
-./target/release/vclip
+vclip
 ```
 
-2. Navigate through the interface:
-- Use `Tab` to switch between input fields
-- Type the required information:
-  - Input file path
-  - Start time (HH:MM:SS format)
-  - End time (HH:MM:SS format)
-  - Output file path
-- Press `Enter` when all fields are filled to start the extraction
-- Press `q` to quit the application
+2. Fill in the required fields:
+   - Input file: Path to your source video
+   - Start time: Where to start the clip (HH:MM:SS)
+   - End time: Where to end the clip (HH:MM:SS)
+   - Output file: Path for the resulting clip
 
-## Dependencies
+3. Press Enter to start processing
 
-- [ratatui](https://crates.io/crates/ratatui) - TUI framework
-- [crossterm](https://crates.io/crates/crossterm) - Terminal manipulation
-- [ffmpeg-next](https://crates.io/crates/ffmpeg-next) - FFmpeg bindings for Rust
-- [anyhow](https://crates.io/crates/anyhow) - Error handling
+The application will display FFmpeg's progress in real-time in the output window.
 
 ## License
 
-This project is licensed under the MIT License - see the LICENSE file for details.
-
-## Contributing
-
-Contributions are welcome! Please feel free to submit a Pull Request. 
+MIT 

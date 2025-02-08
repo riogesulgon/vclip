@@ -1,19 +1,37 @@
 # Changelog
 
+All notable changes to this project will be documented in this file.
+
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
+and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
 ## [Unreleased]
 
-### Changed
-- Updated ffmpeg-next dependency to use latest git version for FFmpeg 7.x compatibility
-- Fixed compilation issues related to FFmpeg API changes
+### Added
+- Auto-scrolling functionality for FFmpeg output
+- Scrollbar widget for output window
+- Visual scroll position indicator
 
-## [0.1.0] - 2024-03-24
+### Changed
+- Improved FFmpeg output display with real-time updates
+- Enhanced UI responsiveness during processing
+- Updated message area to show more content
+
+### Fixed
+- Fixed memory usage by removing unused variables
+- Improved error handling in FFmpeg process
+- Fixed UI refresh rate during processing
+
+## [0.1.0] - 2024-03-20
 
 ### Added
-- Initial project setup with TUI interface using ratatui
-- Basic video clipping functionality using FFmpeg
-- Input fields for source video, start time, end time, and output file
-- Real-time feedback messages
-- Keyboard navigation (Tab, Enter, Backspace)
+- Initial release
+- Basic TUI interface with input fields
+- FFmpeg integration for video clip extraction
+- Real-time process output
+- Keyboard navigation (Tab, Enter, Ctrl+Q)
+- Error handling and user feedback
+- Support for time-based clip extraction
 
 ### Dependencies Added
 - ratatui v0.24.0 - TUI framework
