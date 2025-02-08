@@ -2,6 +2,7 @@
 
 A terminal-based video clip extraction tool using FFmpeg.
 
+![demo](vclip.gif)
 ## Features
 
 - Interactive TUI (Terminal User Interface)
